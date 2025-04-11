@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GMGN_KILLER
 
-## Getting Started
+一键导出 GMGN 平台关注的钱包地址，方便您将数据导入到其他钱包跟踪平台。
 
-First, run the development server:
+## 功能特点
+
+- 轻松获取并处理 GMGN 平台关注的钱包地址列表
+- 自动转换为标准导入格式
+- 自动复制到剪贴板
+- 提供处理数据的即时预览
+- 完全在浏览器端运行，不涉及服务器
+
+## 使用方法
+
+1. 在浏览器中访问并登录 [GMGN](https://gmgn.ai) 平台
+2. 按 F12 打开开发者工具，切换到"网络/Network"标签
+3. 在过滤框中输入"following_wallets"
+4. 刷新页面，找到并点击"following_wallets"请求
+5. 复制响应(Response)中的 JSON 数据
+6. 回到 GMGN_KILLER 工具，粘贴数据并点击"处理数据"按钮
+7. 处理后的数据会自动复制到剪贴板，您可以将其导入到其他平台
+
+## 本地开发
 
 ```bash
+# 安装依赖
+npm install
+
+# 启动开发服务器
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# 构建生产环境版本
+npm run build
+
+# 启动生产环境服务器
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 技术栈
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Next.js 14
+- TypeScript
+- TailwindCSS
+- Vercel 部署
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 为什么需要手动获取数据？
 
-## Learn More
+由于浏览器安全限制（同源策略），一个网站不能直接访问另一个网站的数据或 API。因此，我们需要您手动从 GMGN 网站获取数据，然后粘贴到我们的工具中进行处理。这样既能保证数据安全，也能实现功能需求。
 
-To learn more about Next.js, take a look at the following resources:
+## 隐私与安全
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- 本工具不会存储您的任何数据
+- 所有数据处理都在您的浏览器中完成
+- 不会向任何服务器发送您的个人数据
+- 源代码完全开放，欢迎审查
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 许可证
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
