@@ -451,7 +451,7 @@ export default function Home() {
 
       <footer className="w-full py-6 text-center text-gray-500 text-sm bg-gray-100 border-t border-gray-200 mt-12">
         WalletBeam - 非官方工具 © 2025 |
-        <a href="https://github.com/your-username/walletbeam" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline ml-1">
+        <a href="https://github.com/notdp/gmgn_export" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline ml-1">
           GitHub
         </a>
       </footer>
