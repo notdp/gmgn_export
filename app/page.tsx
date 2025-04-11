@@ -199,7 +199,7 @@ export default function Home() {
           <div className="text-center">
             <div className="mb-16">
               <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-500 to-purple-600 text-transparent bg-clip-text">
-                WalletBeam
+                GMGN Export
               </h1>
               <p className="text-xl text-gray-600 mb-8">一键导出您在GMGN平台关注的钱包地址</p>
               <p className="text-gray-600 max-w-2xl mx-auto">

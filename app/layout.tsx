@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "GMGN_KILLER - 一键导出GMGN关注钱包",
+  title: "一键导出GMGN关注钱包",
   description: "一键导出您在GMGN平台关注的钱包地址，方便您将数据导入到其他平台",
 };
 
