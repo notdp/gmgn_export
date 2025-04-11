@@ -35,6 +35,7 @@ export default function HowToUse() {
                             <p>要找到您关注的钱包数据，请按照以下步骤操作：</p>
                             <ol className="list-decimal ml-5 space-y-2">
                                 <li>在浏览器中打开并登录GMGN网站</li>
+                                <li><strong className="text-red-600">重要：</strong>跳转到关注页面 <a href="https://gmgn.ai/follow?chain=sol" className="text-blue-600 underline" target="_blank" rel="noopener noreferrer">https://gmgn.ai/follow?chain=sol</a></li>
                                 <li>打开浏览器开发者工具（按F12或右键选择&quot;检查&quot;）</li>
                                 <li>切换到&quot;网络/Network&quot;标签页</li>
                                 <li>在过滤框中输入&quot;following_wallets&quot;</li>
@@ -50,7 +51,7 @@ export default function HowToUse() {
                         <div className="space-y-3">
                             <div>
                                 <p className="font-medium text-gray-800">看不到following_wallets请求怎么办？</p>
-                                <p>请确保您已登录GMGN网站。尝试刷新页面，或切换到&quot;关注&quot;标签。确保过滤器输入正确，有时请求可能命名稍有不同。</p>
+                                <p>请确保您已登录GMGN网站并跳转到<strong>关注页面</strong>（https://gmgn.ai/follow?chain=sol）。尝试刷新页面，确保过滤器输入正确，有时请求可能命名稍有不同。</p>
                             </div>
                             <div>
                                 <p className="font-medium text-gray-800">粘贴数据后显示格式错误？</p>

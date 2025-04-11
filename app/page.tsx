@@ -242,7 +242,7 @@ export default function Home() {
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
             <h3 className="font-medium text-gray-700 mb-2">如何获取数据：</h3>
             <ol className="list-decimal list-inside text-left space-y-2 text-gray-600">
-              <li>在浏览器中<a href="https://gmgn.ai" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">登录GMGN网站</a></li>
+              <li>在浏览器中<a href="https://gmgn.ai/follow?chain=sol" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">登录GMGN网站</a>, 确保您在<a href="https://gmgn.ai/follow?chain=sol" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">关注页面</a></li>
               <li>同时按下 <kbd className="px-2 py-1 bg-gray-200 rounded">F12</kbd> 键或右键点击页面选择&quot;检查&quot;打开开发者工具</li>
               <li>切换到 <strong>网络/Network</strong> 标签</li>
               <li>在搜索框中输入 <code className="px-2 py-1 bg-gray-200 rounded">following_wallets</code></li>
