@@ -428,8 +428,8 @@ export default function Home() {
     const emojis = [
       // 交通工具
       '🚗', '🚕', '🚙', '🚌', '🚎', '🏎️', '🚓', '🚑', '🚒', '🚚', '🚛', '🚜', '🚲', '🛵', '🏍️', '🛺', '🚨',
-      '🚔', '🚍', '🚘', '🚖', '🚡', '🚠', '🚟', '🚃', '🚋', '🚞', '🚝', '🚄', '🚅', '🚈', '🚂', '🚆', '��',
-      '🚊', '🚉', '✈️', '🛫', '🛬', '🛩️', '💺', '🛰️', '🚀', '🛸', '🚁', '🛶', '⛵', '🚤', '🛥️', '🛳️', '⛴️', '🚢',
+      '🚔', '🚍', '🚘', '🚖', '🚡', '🚠', '🚟', '🚃', '🚋', '🚞', '🚝', '🚄', '🚅', '🚈', '🚂', '🚆', '🚊',
+      '🚉', '✈️', '🛫', '🛬', '🛩️', '💺', '🛰️', '🚀', '🛸', '🚁', '🛶', '⛵', '🚤', '🛥️', '🛳️', '⛴️', '🚢',
 
       // 动物
       '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐻‍❄️', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🙈', '🙉',
@@ -454,7 +454,7 @@ export default function Home() {
       '👋', '🤚', '🖐️', '✋', '🖖', '👌', '🤌', '🤏', '✌️', '🤞', '🤟', '🤘', '🤙', '👈', '👉', '👆', '👇',
 
       // 植物与自然
-      '🌵', '🎄', '🌲', '🌳', '🌴', '🌱', '🌿', '☘️', '🍀', '🍁', '🍂', '🍃', '🪴', '��', '⭐', '🌟', '✨',
+      '🌵', '🎄', '🌲', '🌳', '🌴', '🌱', '🌿', '☘️', '🍀', '🍁', '🍂', '🍃', '🪴', '🪷', '⭐', '🌟', '✨',
       '⚡', '☄️', '💥', '🔥', '🌪️', '🌈', '☀️', '🌤️', '⛅', '🌥️', '☁️', '🌦️', '🌧️', '⛈️', '🌩️', '🌨️'
     ];
 
@@ -810,7 +810,61 @@ export default function Home() {
               </div>
 
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-medium text-gray-700">钱包列表 ({exportedData.length})</h3>
+                <div className="flex items-center">
+                  <h3 className="text-lg font-medium text-gray-700">钱包列表 ({exportedData.length})</h3>
+                  <div className="relative ml-2 group">
+                    <div className="cursor-help text-gray-500 hover:text-gray-700">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div className="absolute left-0 top-6 w-64 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-10 text-sm text-gray-700 hidden group-hover:block">
+                      <h4 className="font-bold mb-3 text-center border-b pb-2 border-gray-100">图标说明</h4>
+                      <div className="space-y-4 mt-3">
+                        <div className="flex items-center">
+                          <div className="w-8 flex justify-center">
+                            <img src="/icons8-x-logo.svg" alt="X" className="h-4 w-4" />
+                          </div>
+                          <span className="ml-3">Twitter链接</span>
+                        </div>
+                        <div className="flex items-center">
+                          <div className="w-8 flex justify-center">
+                            <img src="/twitter_verified_badge.svg" alt="KOL" className="w-3.5 h-3.5" />
+                          </div>
+                          <span className="ml-3">KOL账号</span>
+                        </div>
+                        <div className="flex items-center">
+                          <div className="w-8 flex justify-center">
+                            <span className="text-xs text-gray-500">[twitter]</span>
+                          </div>
+                          <span className="ml-3">Twitter用户名</span>
+                        </div>
+                        <div className="flex items-center">
+                          <div className="w-8 flex justify-center">
+                            <span className="border-b border-indigo-300 text-xs">名称</span>
+                          </div>
+                          <span className="ml-3">Twitter链接</span>
+                        </div>
+                        <div className="flex items-center">
+                          <div className="w-8 flex justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </div>
+                          <span className="ml-3">删除钱包</span>
+                        </div>
+                        <div className="flex items-center">
+                          <div className="w-8 flex justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                          </div>
+                          <span className="ml-3">编辑钱包</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden mb-4">
