@@ -205,7 +205,7 @@ const WalletAvatar = ({ wallet }: { wallet: WalletPreviewItem }) => {
     <img
       src={wallet.avatarUrl}
       alt="Avatar"
-      className="h-10 w-10 rounded-full"
+      className="h-10 w-10 rounded-md"
       onError={handleImageError}
     />
   );
@@ -874,8 +874,8 @@ export default function Home() {
                       <tr>
                         <th className="pl-4 pr-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-12"></th>
                         <th className="pl-0 pr-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-28">钱包地址</th>
-                        <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-36">用户</th>
-                        <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-24">
+                        <th className="pl-6 pr-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-36">用户</th>
+                        <th className="pl-8 pr-0 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-24">
                           <button
                             className="flex items-center outline-none focus:outline-none"
                             onClick={() => requestSort('totalProfit')}
@@ -884,7 +884,7 @@ export default function Home() {
                             {renderSortIcon('totalProfit')}
                           </button>
                         </th>
-                        <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-20">
+                        <th className="pl-1 pr-1 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-20">
                           <button
                             className="flex items-center outline-none focus:outline-none"
                             onClick={() => requestSort('totalProfitPnl')}
@@ -893,7 +893,7 @@ export default function Home() {
                             {renderSortIcon('totalProfitPnl')}
                           </button>
                         </th>
-                        <th className="px-2 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider w-20">操作</th>
+                        <th className="py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-20">操作</th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
@@ -965,7 +965,7 @@ export default function Home() {
                             </td>
                           ) : (
                             <>
-                              <td className="px-2 py-4 whitespace-nowrap text-sm">
+                              <td className="pl-6 py-4 whitespace-nowrap text-sm">
                                 <div className="flex items-center max-w-[140px]">
                                   {wallet.twitterUsername ? (
                                     <a
@@ -999,7 +999,7 @@ export default function Home() {
                                   )}
                                 </div>
                               </td>
-                              <td className="px-2 py-4 whitespace-nowrap text-sm">
+                              <td className="pl-8 pr-0 py-4 whitespace-nowrap text-sm">
                                 {wallet.totalProfit !== undefined && (
                                   <span className={`font-medium ${wallet.totalProfit >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                                     {wallet.totalProfit >= 0 ? '+' : ''}
@@ -1007,7 +1007,7 @@ export default function Home() {
                                   </span>
                                 )}
                               </td>
-                              <td className="px-2 py-4 whitespace-nowrap text-sm">
+                              <td className="pl-1 pr-1 py-4 whitespace-nowrap text-sm">
                                 {wallet.totalProfitPnl !== undefined && (
                                   <span className={`font-medium ${wallet.totalProfitPnl >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                                     {wallet.totalProfitPnl >= 0 ? '+' : ''}
@@ -1017,9 +1017,9 @@ export default function Home() {
                               </td>
                             </>
                           )}
-                          <td className="px-2 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <td className="py-4 whitespace-nowrap text-center text-sm font-medium">
                             {editingWalletAddress === wallet.walletAddress ? (
-                              <div className="flex space-x-2 justify-end">
+                              <div className="flex space-x-2 justify-center">
                                 <button onClick={saveEdit} className="text-green-500 hover:text-green-700">
                                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -1032,7 +1032,7 @@ export default function Home() {
                                 </button>
                               </div>
                             ) : (
-                              <div className="flex space-x-3 justify-end">
+                              <div className="flex space-x-2 justify-center">
                                 <button
                                   onClick={() => deleteWallet(wallet.walletAddress)}
                                   className="text-red-500 hover:text-red-700"
