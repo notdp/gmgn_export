@@ -212,7 +212,11 @@ const WalletAvatar = ({ wallet }: { wallet: WalletPreviewItem }) => {
 };
 
 // 格式化利润为带K、M的简短形式
-function formatProfitWithShorthand(profit: number): string {
+function formatProfitWithShorthand(profit: number | null | undefined): string {
+  if (profit === null || profit === undefined) {
+    return '$0.0';
+  }
+  
   if (Math.abs(profit) >= 1000000) {
     return `$${(profit / 1000000).toFixed(1)}M`;
   } else if (Math.abs(profit) >= 1000) {
@@ -233,6 +237,7 @@ export default function Home() {
   const [editForm, setEditForm] = useState<WalletPreviewItem | null>(null);
   const [previewFormat, setPreviewFormat] = useState<'axiom' | 'gmgn'>('axiom'); // 新增状态跟踪预览格式
   const [copiedButton, setCopiedButton] = useState<'axiom' | 'gmgn' | null>(null); // 跟踪哪个按钮被点击
+  const [axiomBatchIndex, setAxiomBatchIndex] = useState<number>(0); // 当前显示的Axiom批次索引
   // 排序状态
   const [sortConfig, setSortConfig] = useState<{
     key: 'totalProfit' | 'totalProfitPnl' | null;
@@ -388,6 +393,7 @@ export default function Home() {
 
       // 首先设置默认预览格式
       setPreviewFormat('gmgn');
+      setAxiomBatchIndex(0); // 重置批次索引
 
       // 然后生成并更新预览内容
       const gmgnContent = generateGMGNFormat(exportData);
@@ -422,8 +428,9 @@ export default function Home() {
     }).join('\n');
   };
 
-  // 生成Axiom格式的数据
-  const generateAxiomFormat = (data = exportedData) => {
+  // 生成Axiom格式的数据（支持分批）
+  const generateAxiomFormat = (data = exportedData, batchIndex: number | null = null) => {
+    const BATCH_SIZE = 300; // Axiom的导入限制
     // 可用的emoji列表
     const emojis = [
       // 交通工具
@@ -472,7 +479,14 @@ export default function Home() {
       return emojis[index];
     };
 
-    const axiomData: AxiomExportItem[] = data.map(wallet => ({
+    // 如果不指定批次索引，则导出所有数据（用于下载）
+    const dataToExport = batchIndex === null ? data : (() => {
+      const startIndex = batchIndex * BATCH_SIZE;
+      const endIndex = Math.min(startIndex + BATCH_SIZE, data.length);
+      return data.slice(startIndex, endIndex);
+    })();
+
+    const axiomData: AxiomExportItem[] = dataToExport.map(wallet => ({
       trackedWalletAddress: wallet.walletAddress,
       name: wallet.displayName,
       emoji: getEmojiFromName(wallet.displayName), // 使用名称生成emoji
@@ -486,21 +500,34 @@ export default function Home() {
   const updateJsonOutput = () => {
     // 当数据更新时，同时更新预览内容
     if (previewFormat === 'axiom') {
-      setPreviewContent(generateAxiomFormat());
+      setPreviewContent(generateAxiomFormat(exportedData, axiomBatchIndex));
     } else {
       setPreviewContent(generateGMGNFormat());
     }
   };
 
+  // 获取Axiom批次信息
+  const getAxiomBatchInfo = () => {
+    const BATCH_SIZE = 300;
+    const totalBatches = Math.ceil(exportedData.length / BATCH_SIZE);
+    return { totalBatches, currentBatch: axiomBatchIndex + 1, BATCH_SIZE };
+  };
+
   // 复制JSON数据到剪贴板
-  const copyToClipboard = (format: 'axiom' | 'gmgn' = 'axiom') => {
+  const copyToClipboard = (format: 'axiom' | 'gmgn' = 'axiom', batchIndex: number = axiomBatchIndex) => {
     try {
-      const content = format === 'axiom' ? generateAxiomFormat() : generateGMGNFormat();
+      const content = format === 'axiom' ? generateAxiomFormat(exportedData, batchIndex) : generateGMGNFormat();
       navigator.clipboard.writeText(content);
       setPreviewFormat(format);
       setPreviewContent(content);
       setCopiedButton(format);
-      setStatus(`已复制${format === 'axiom' ? 'AXIOM' : 'GMGN'}格式到剪贴板！`);
+      
+      if (format === 'axiom' && exportedData.length > 300) {
+        const { totalBatches } = getAxiomBatchInfo();
+        setStatus(`已复制AXIOM格式第${batchIndex + 1}批（共${totalBatches}批）到剪贴板！`);
+      } else {
+        setStatus(`已复制${format === 'axiom' ? 'AXIOM' : 'GMGN'}格式到剪贴板！`);
+      }
 
       // 2秒后清除复制状态
       setTimeout(() => {
@@ -516,7 +543,8 @@ export default function Home() {
   // 下载为TXT文件
   const downloadAsTxt = (format: 'axiom' | 'gmgn' = 'axiom') => {
     try {
-      const content = format === 'axiom' ? generateAxiomFormat() : generateGMGNFormat();
+      // 下载时导出所有数据，不分批
+      const content = format === 'axiom' ? generateAxiomFormat(exportedData, null) : generateGMGNFormat();
       const filename = format === 'axiom' ? 'axiom_wallets.txt' : 'gmgn_wallets.txt';
 
       // 创建Blob对象
@@ -754,9 +782,42 @@ export default function Home() {
             <div className="mb-8">
               <div className="bg-gray-50 p-4 rounded-lg mb-4">
                 <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-base font-medium text-gray-700">
-                    {previewFormat === 'axiom' ? 'AXIOM格式预览' : 'GMGN格式预览'}
-                  </h3>
+                  <div className="flex items-center space-x-2">
+                    <h3 className="text-base font-medium text-gray-700">
+                      {previewFormat === 'axiom' ? 'AXIOM格式预览' : 'GMGN格式预览'}
+                    </h3>
+                    {previewFormat === 'axiom' && exportedData.length > 300 && (
+                      <div className="flex items-center space-x-2 bg-amber-100 px-3 py-1 rounded-lg">
+                        <span className="text-sm text-amber-700 font-medium">
+                          第 {axiomBatchIndex + 1} 批 / 共 {getAxiomBatchInfo().totalBatches} 批
+                        </span>
+                        <div className="flex space-x-1">
+                          <button
+                            onClick={() => {
+                              const newIndex = Math.max(0, axiomBatchIndex - 1);
+                              setAxiomBatchIndex(newIndex);
+                              setPreviewContent(generateAxiomFormat(exportedData, newIndex));
+                            }}
+                            disabled={axiomBatchIndex === 0}
+                            className="px-2 py-0.5 text-xs bg-amber-600 text-white rounded disabled:bg-gray-400"
+                          >
+                            上一批
+                          </button>
+                          <button
+                            onClick={() => {
+                              const newIndex = Math.min(getAxiomBatchInfo().totalBatches - 1, axiomBatchIndex + 1);
+                              setAxiomBatchIndex(newIndex);
+                              setPreviewContent(generateAxiomFormat(exportedData, newIndex));
+                            }}
+                            disabled={axiomBatchIndex >= getAxiomBatchInfo().totalBatches - 1}
+                            className="px-2 py-0.5 text-xs bg-amber-600 text-white rounded disabled:bg-gray-400"
+                          >
+                            下一批
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                   <div className="flex space-x-2">
                     <button
                       onClick={() => copyToClipboard('gmgn')}
@@ -781,7 +842,10 @@ export default function Home() {
                       下载GMGN格式
                     </button>
                     <button
-                      onClick={() => copyToClipboard('axiom')}
+                      onClick={() => {
+                        copyToClipboard('axiom');
+                        setPreviewFormat('axiom');
+                      }}
                       className={`px-4 py-2 rounded-lg font-medium text-white flex items-center text-sm ${previewFormat === 'axiom' ? 'bg-green-700' : 'bg-green-600 hover:bg-green-700'} transition-all duration-300`}
                     >
                       {copiedButton === 'axiom' ? (
@@ -791,16 +855,19 @@ export default function Home() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                         </svg>
                       )}
-                      复制AXIOM格式
+                      复制AXIOM格式{exportedData.length > 300 ? `（第${axiomBatchIndex + 1}批）` : ''}
                     </button>
                     <button
-                      onClick={() => downloadAsTxt('axiom')}
+                      onClick={() => {
+                        downloadAsTxt('axiom');
+                        setPreviewFormat('axiom');
+                      }}
                       className="px-4 py-2 rounded-lg font-medium text-white flex items-center text-sm bg-green-600 hover:bg-green-700 transition-all duration-300"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                       </svg>
-                      下载AXIOM格式
+                      下载AXIOM格式{exportedData.length > 300 ? '（全部）' : ''}
                     </button>
                   </div>
                 </div>
@@ -1093,7 +1160,10 @@ export default function Home() {
                 <p className="text-gray-700">1. 您可以通过点击&quot;编辑&quot;来修改每个钱包的信息。</p>
                 <p className="text-gray-700">2. 点击&quot;复制GMGN格式&quot;可将数据以GMGN支持的格式复制到剪贴板。</p>
                 <p className="text-gray-700">3. 点击&quot;复制AXIOM格式&quot;可将数据以AXIOM支持的格式复制到剪贴板。</p>
-                <p className="text-gray-700">4. 点击&quot;下载GMGN格式&quot;或&quot;下载AXIOM格式&quot;可将数据保存为TXT文件到您的设备。</p>
+                {exportedData.length > 300 && (
+                  <p className="text-amber-700 font-medium">4. ✨ Axiom限制每次最多导入300个钱包，已自动为您分成{getAxiomBatchInfo().totalBatches}批。复制时请分批操作，下载可一次性导出全部数据。</p>
+                )}
+                <p className="text-gray-700">{exportedData.length > 300 ? '5' : '4'}. 点击&quot;下载GMGN格式&quot;或&quot;下载AXIOM格式&quot;可将数据保存为TXT文件到您的设备。</p>
               </div>
             </div>
           ) : (
